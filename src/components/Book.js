@@ -25,13 +25,14 @@ const Book = ({
 					<div>Price: {price} </div>
 					<div>Date: {new Date(date).toDateString()}</div>
 				</div>
-				<Button
-					variant="primary"
-					onClick={() => navigate(editURL)}
+				<a
 					href={editURL}
+					className="btn btn-primary"
+					role="button"
+					aria-disabled="true"
 				>
 					Edit
-				</Button>{" "}
+				</a>{" "}
 				<Button variant="danger" onClick={() => handleRemoveBook(id)}>
 					Delete
 				</Button>

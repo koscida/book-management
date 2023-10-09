@@ -7,31 +7,108 @@ const resourceName = "books";
 export function getBooks(setAPIData) {
 	console.log("GET books");
 
-	axios.get(`${mockapiURL}/${resourceName}`).then((response) => {
-		console.log("response: ", response);
-		setAPIData(response.data);
+	let p = new Promise((res, err) => {
+		axios.get(`${mockapiURL}/${resourceName}`).then((response) => {
+			console.log("response: ", response);
+			if (response.status === 200) res(response.data);
+			else err(response);
+		});
 	});
+	p.then(
+		(value) => {
+			console.log("value: ", value);
+			setAPIData(value);
+		},
+		(error) => {
+			console.log("error: ", error);
+		}
+	);
 }
 
 export function getBook(bookId, setAPIData) {
 	console.log("GET book");
-	axios.get(`${mockapiURL}/${resourceName}/${bookId}`).then((response) => {
-		console.log("response: ", response);
-		setAPIData(response.data);
+	let p = new Promise((res, err) => {
+		axios
+			.get(`${mockapiURL}/${resourceName}/${bookId}`)
+			.then((response) => {
+				console.log("response: ", response);
+				if (response.status === 200) res(response.data);
+				else err(response);
+			});
 	});
+	p.then(
+		(value) => {
+			console.log("value: ", value);
+			setAPIData(value);
+		},
+		(error) => {
+			console.log("error: ", error);
+		}
+	);
 }
 
-export function createBook(book) {
+export function createBook(book, setAPIData) {
 	console.log("CREATE book", book);
-	axios.post(`${mockapiURL}/${resourceName}`, book);
+	let p = new Promise((res, err) => {
+		axios
+			.post(`${mockapiURL}/${resourceName}`, book)
+			.then((response) => {
+				console.log("response: ", response);
+				if (response.status >= 200 && response.status < 300)
+					res(response.data);
+				else err(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	});
+	p.then(
+		(value) => {
+			console.log("value: ", value);
+			setAPIData(value);
+		},
+		(error) => {
+			console.log("error: ", error);
+		}
+	);
 }
 
-export function updateBook(bookId, book) {
+export function updateBook(bookId, book, setAPIData) {
 	console.log("UPDATE book", book);
-	axios.put(`${mockapiURL}/${resourceName}/${bookId}`, book);
+	let p = new Promise((res, err) => {
+		axios
+			.put(`${mockapiURL}/${resourceName}/${bookId}`, book)
+			.then((response) => {
+				console.log("response: ", response);
+				if (response.status === 200) res(response.data);
+				else err(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	});
+	p.then(
+		(value) => {
+			console.log("value: ", value);
+			setAPIData(value);
+		},
+		(error) => {
+			console.log("error: ", error);
+		}
+	);
 }
 
-export function deleteBook(bookId) {
+export function deleteBook(bookId, deleteCallBack) {
 	console.log("DELETE bookId: ", bookId);
-	axios.delete(`${mockapiURL}/${resourceName}/${bookId}`);
+	let p = new Promise((res, err) => {
+		axios
+			.delete(`${mockapiURL}/${resourceName}/${bookId}`)
+			.then((response) => {
+				console.log("response: ", response);
+				deleteCallBack();
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	});
 }

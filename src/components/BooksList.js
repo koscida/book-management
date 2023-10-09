@@ -8,12 +8,16 @@ const BookList = () => {
 	const navigate = useNavigate();
 
 	const [APIData, setAPIData] = useState([]);
+	const [requestedData, setRequestedData] = useState(new Date());
 
-	useEffect(() => getBooks(setAPIData), []);
+	useEffect(() => {
+		getBooks(setAPIData);
+	}, [requestedData]);
 
 	const handleRemoveBook = (id) => {
-		deleteBook(id);
-		navigate("/");
+		deleteBook(id, () => {
+			setRequestedData(new Date());
+		});
 	};
 
 	return (
@@ -33,6 +37,7 @@ const BookList = () => {
 					</p>
 				)}
 			</div>
+			<p>Updated: {requestedData.toISOString()}</p>
 		</>
 	);
 };

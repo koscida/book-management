@@ -11,16 +11,20 @@ const AddBook = () => {
 	const [APIData, setAPIData] = useState([]);
 
 	useEffect(() => {
-		if (!_.isEmpty(id)) getBook(id, setAPIData);
-		else navigate("/");
+		if (!_.isEmpty(id) && _.isEmpty(APIData)) getBook(id, setAPIData);
+		// else navigate("/");
 	});
 
 	const handleSubmit = (book) => {
-		updateBook(id, book);
-		navigate("/");
+		updateBook(id, book, setAPIData);
+		// navigate("/");
 	};
 
-	return <BookForm handleOnSubmit={handleSubmit} book={APIData} />;
+	return _.isEmpty(APIData) ? (
+		<>Loading...</>
+	) : (
+		<BookForm handleOnSubmit={handleSubmit} book={APIData} />
+	);
 };
 
 export default AddBook;

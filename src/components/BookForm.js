@@ -2,19 +2,26 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
-const BookForm = (props) => {
-	const [book, setBook] = useState({
-		bookname: props.book ? props.book.bookname : "",
-		author: props.book ? props.book.author : "",
-		quantity: props.book ? props.book.quantity : "",
-		price: props.book ? props.book.price : "",
-		date: props.book ? props.book.date : "",
-	});
+const getBookForm = (book) => {
+	console.log("--getBookForm-- book: ", book);
+	return {
+		bookname: book ? book.bookname : "",
+		author: book ? book.author : "",
+		quantity: book ? book.quantity : "",
+		price: book ? book.price : "",
+		date: book ? book.date : "",
+	};
+};
+
+const BookForm = ({ book, handleOnSubmit }) => {
+	console.log("book: ", book);
+	const [bookForm, setBookForm] = useState(getBookForm(book));
+	console.log("bookForm: ", bookForm);
+	const { bookname, author, price, quantity } = bookForm;
 
 	const [errorMsg, setErrorMsg] = useState("");
-	const { bookname, author, price, quantity } = book;
 
-	const handleOnSubmit = (event) => {
+	const handleSubmit = (event) => {
 		event.preventDefault();
 		const values = [bookname, author, price, quantity];
 		let errorMsg = "";
@@ -33,7 +40,7 @@ const BookForm = (props) => {
 				quantity,
 				date: new Date(),
 			};
-			props.handleOnSubmit(book);
+			handleOnSubmit(book);
 		} else {
 			errorMsg = "Please fill out all the fields.";
 		}
@@ -45,7 +52,7 @@ const BookForm = (props) => {
 		switch (name) {
 			case "quantity":
 				if (value === "" || parseInt(value) === +value) {
-					setBook((prevState) => ({
+					setBookForm((prevState) => ({
 						...prevState,
 						[name]: value,
 					}));
@@ -53,14 +60,14 @@ const BookForm = (props) => {
 				break;
 			case "price":
 				if (value === "" || value.match(/^\d{1,}(\.\d{0,2})?$/)) {
-					setBook((prevState) => ({
+					setBookForm((prevState) => ({
 						...prevState,
 						[name]: value,
 					}));
 				}
 				break;
 			default:
-				setBook((prevState) => ({
+				setBookForm((prevState) => ({
 					...prevState,
 					[name]: value,
 				}));
@@ -70,7 +77,7 @@ const BookForm = (props) => {
 	return (
 		<div className="main-form">
 			{errorMsg && <p className="errorMsg">{errorMsg}</p>}
-			<Form onSubmit={handleOnSubmit}>
+			<Form onSubmit={handleSubmit}>
 				<Form.Group controlId="name">
 					<Form.Label>Book Name</Form.Label>
 					<Form.Control

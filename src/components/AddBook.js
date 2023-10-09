@@ -8,8 +8,8 @@ const AddBook = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = (book) => {
-		createBook(book);
-		navigate("/");
+		createBook(book, () => {});
+		// navigate("/");
 	};
 
 	return <BookForm handleOnSubmit={handleSubmit} />;
